@@ -109,4 +109,30 @@ class AdminController extends Controller
 
         return $this->_show_output($output, $title);
     }
+
+    public function tasks()
+    {
+        $title = "DB Client";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('consuments');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Client', 'DB Client');
+        $crud->unsetColumns(['created_at', 'updated_at']);
+        $crud->unsetFields(['created_at', 'updated_at']);
+        $crud->setRelation('user_id','users','name');
+        $crud->displayAs('user_id','Sales');
+        $crud->callbackBeforeInsert(function ($s) {
+            $s->data['created_at'] = now();
+            $s->data['updated_at'] = now();
+            return $s;
+        });
+        $crud->callbackBeforeUpdate(function ($s) {
+            $s->data['updated_at'] = now();
+            return $s;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Consument;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -24,13 +25,37 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = User::count();
+        $user_id = auth()->id();
+        if (auth()->user()->role_id == 1) {
+            $booking = Consument::where('status_konsumen', 'like', '%booking%')->count();
+            $follow = Consument::where('status_konsumen', 'like', '%follow%')->count();
+            $reject = Consument::where('status_konsumen', 'like', '%reject%')->count();
+            $all = Consument::count();
+        } else {
+            $booking = Consument::where('user_id', $user_id)->where('status_konsumen', 'like', '%booking%')->count();
+            $follow = Consument::where('user_id', $user_id)->where('status_konsumen', 'like', '%follow%')->count();
+            $reject = Consument::where('user_id', $user_id)->where('status_konsumen', 'like', '%reject%')->count();
+            $all = Consument::where('user_id', $user_id)->count();
+        }
 
         $widget = [
-            'users' => $users,
-            //...
+            'booking' => $booking,
+            'reject' => $reject,
+            'follow' => $follow,
+            'all' => $all,
         ];
 
         return view('home', compact('widget'));
+    }
+
+    public function store(Request $request)
+    {
+        $kon = new Consument();
+        $kon->name = $request->name;
+        $kon->status_konsumen = $request->task;
+        $kon->user_id = auth()->id();
+        $kon->save();
+
+        return redirect()->route('member.konsumen');
     }
 }

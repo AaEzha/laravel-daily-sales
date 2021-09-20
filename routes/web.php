@@ -30,14 +30,20 @@ Route::get('/blank', function () {
     return view('blank');
 })->name('blank');
 
-Route::name('admin.')->middleware('can:admin')->prefix('admin')->group(function() {
+Route::middleware('auth')->group(function() {
+    Route::post('/store', 'HomeController@store')->name('store');
+});
+
+Route::name('admin.')->middleware(['auth', 'can:admin'])->prefix('admin')->group(function() {
     Route::get('/posisi', 'AdminController@posisi')->name('posisi');
     Route::post('/posisi', 'AdminController@posisi');
     Route::get('/pengumuman', 'AdminController@pengumuman')->name('pengumuman');
     Route::post('/pengumuman', 'AdminController@pengumuman');
+    Route::get('/tasks', 'AdminController@tasks')->name('tasks');
+    Route::post('/tasks', 'AdminController@tasks');
 });
 
-Route::name('member.')->middleware('can:member')->prefix('member')->group(function() {
+Route::name('member.')->middleware(['auth', 'can:member'])->prefix('member')->group(function() {
     Route::get('/konsumen', 'KaryawanController@konsumen')->name('konsumen');
     Route::post('/konsumen', 'KaryawanController@konsumen');
 });

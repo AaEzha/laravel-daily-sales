@@ -58,24 +58,24 @@ class MemberController extends Controller
 
     public function index()
     {
-        $title = "Daftar Karyawan";
+        $title = "Daftar Sales";
 
         $crud = $this->_getGroceryCrudEnterprise();
         $crud->setTable('users');
         $crud->setSkin('bootstrap-v4');
-        $crud->setSubject('Karyawan', 'Daftar Karyawan');
+        $crud->setSubject('Sales', 'Daftar Sales');
         $crud->unsetAdd();
-        $crud->columns(['npp','name', 'role_id', 'position_id', 'pendidikan', 'email', 'updated_at']);
-        $crud->addFields(['npp','name', 'role_id', 'position_id', 'pendidikan', 'email', 'password']);
-        $crud->editFields(['npp','name', 'role_id', 'position_id', 'pendidikan', 'email']);
+        $crud->columns(['nip','name', 'role_id', 'position', 'jenis_kelamin', 'email', 'updated_at']);
+        $crud->addFields(['nip','name', 'role_id', 'position', 'jenis_kelamin', 'email', 'password']);
+        $crud->editFields(['nip','name', 'role_id', 'position', 'jenis_kelamin', 'email']);
         $crud->setRelation('role_id', 'roles', 'name');
         $crud->displayAs([
-            'role_id' => 'Role',
-            'npp' => 'NPP',
+            'role_id' => 'Status',
+            'nip' => 'NIP',
             'name' => 'Nama Lengkap',
-            'position_id' => 'Posisi'
+            'position' => 'Jabatan',
+            'jenis_kelamin' => 'Jenis Kelamin'
         ]);
-        $crud->setRelation('position_id', 'positions', 'name');
         $crud->callbackAfterInsert(function ($s) {
             $user = User::find($s->insertId);
             $user->password = Hash::make($user->password);
