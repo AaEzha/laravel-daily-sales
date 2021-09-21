@@ -69,6 +69,7 @@ class KaryawanController extends Controller
             $s->data['updated_at'] = now();
             return $s;
         });
+        $crud->where(['user_id' => auth()->id()]);
         $crud->callbackBeforeUpdate(function ($s) {
             $s->data['updated_at'] = now();
             return $s;
