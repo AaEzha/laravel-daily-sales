@@ -1,14 +1,21 @@
-<li class="nav-item {{ Nav::isRoute('member.index') }}">
-    <a class="nav-link" href="{{ route('member.index') }}">
+<li class="nav-item {{ Nav::isRoute('admin.sales') }}">
+    <a class="nav-link" href="{{ route('admin.sales') }}">
         <i class="fas fa-fw fa-users"></i>
         <span>Daftar Sales</span>
+    </a>
+</li>
+
+<li class="nav-item {{ Nav::isRoute('admin.client') }}">
+    <a class="nav-link" href="{{ route('admin.client') }}">
+        <i class="fas fa-fw fa-user-plus"></i>
+        <span>DB Client</span>
     </a>
 </li>
 
 <li class="nav-item {{ Nav::isRoute('admin.tasks') }}">
     <a class="nav-link" href="{{ route('admin.tasks') }}">
         <i class="fas fa-fw fa-calendar-check"></i>
-        <span>DB Client</span>
+        <span>DB Task Client</span>
     </a>
 </li>
 

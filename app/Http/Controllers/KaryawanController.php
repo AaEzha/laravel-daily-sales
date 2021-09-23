@@ -78,4 +78,34 @@ class KaryawanController extends Controller
 
         return $this->_show_output($output, $title);
     }
+
+    public function tasks()
+    {
+        $title = "DB Task Client";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('consuments');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Client', 'DB Client');
+        $crud->unsetColumns(['created_at', 'updated_at']);
+        $crud->unsetFields(['created_at', 'updated_at']);
+        $crud->fields(['name','status_konsumen','handphone']);
+        $crud->columns(['name','status_konsumen','handphone']);
+        $crud->displayAs('status_konsumen','Task Client');
+        $crud->displayAs('name','Nama Client');
+        $crud->callbackBeforeInsert(function ($s) {
+            $s->data['user_id'] = auth()->id();
+            $s->data['created_at'] = now();
+            $s->data['updated_at'] = now();
+            return $s;
+        });
+        $crud->callbackBeforeUpdate(function ($s) {
+            $s->data['updated_at'] = now();
+            return $s;
+        });
+        $crud->where(['user_id' => auth()->id()]);
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
 }

@@ -110,7 +110,43 @@ class AdminController extends Controller
         return $this->_show_output($output, $title);
     }
 
-    public function tasks()
+    public function sales()
+    {
+        $title = "Daftar Sales";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('users');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Sales', 'Daftar Sales');
+        $crud->unsetAdd();
+        $crud->columns(['nip','name', 'role_id', 'position', 'jenis_kelamin', 'email', 'updated_at']);
+        $crud->addFields(['nip','name', 'role_id', 'position', 'jenis_kelamin', 'email', 'password']);
+        $crud->editFields(['nip','name', 'role_id', 'position', 'jenis_kelamin', 'email']);
+        $crud->setRelation('role_id', 'roles', 'name');
+        $crud->displayAs([
+            'role_id' => 'Status',
+            'nip' => 'NIP',
+            'name' => 'Nama Lengkap',
+            'position' => 'Jabatan',
+            'jenis_kelamin' => 'Jenis Kelamin'
+        ]);
+        $crud->callbackAfterInsert(function ($s) {
+            $user = User::find($s->insertId);
+            $user->password = Hash::make($user->password);
+            $user->save();
+            return $s;
+        });
+        $crud->callbackAfterUpdate(function ($s) {
+            $user = User::find($s->primaryKeyValue);
+            $user->touch();
+            return $s;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
+
+    public function client()
     {
         $title = "DB Client";
 
@@ -122,6 +158,36 @@ class AdminController extends Controller
         $crud->unsetFields(['created_at', 'updated_at']);
         $crud->setRelation('user_id','users','name');
         $crud->displayAs('user_id','Sales');
+        $crud->callbackBeforeInsert(function ($s) {
+            $s->data['created_at'] = now();
+            $s->data['updated_at'] = now();
+            return $s;
+        });
+        $crud->callbackBeforeUpdate(function ($s) {
+            $s->data['updated_at'] = now();
+            return $s;
+        });
+        $output = $crud->render();
+
+        return $this->_show_output($output, $title);
+    }
+
+    public function tasks()
+    {
+        $title = "DB Task Client";
+
+        $crud = $this->_getGroceryCrudEnterprise();
+        $crud->setTable('consuments');
+        $crud->setSkin('bootstrap-v4');
+        $crud->setSubject('Client', 'DB Client');
+        $crud->unsetColumns(['created_at', 'updated_at']);
+        $crud->unsetFields(['created_at', 'updated_at']);
+        $crud->fields(['name','status_konsumen','handphone','user_id']);
+        $crud->columns(['name','status_konsumen','handphone','user_id']);
+        $crud->setRelation('user_id','users','name');
+        $crud->displayAs('user_id','Sales');
+        $crud->displayAs('status_konsumen','Task Client');
+        $crud->displayAs('name','Nama Client');
         $crud->callbackBeforeInsert(function ($s) {
             $s->data['created_at'] = now();
             $s->data['updated_at'] = now();

@@ -39,6 +39,10 @@ Route::name('admin.')->middleware(['auth', 'can:admin'])->prefix('admin')->group
     Route::post('/posisi', 'AdminController@posisi');
     Route::get('/pengumuman', 'AdminController@pengumuman')->name('pengumuman');
     Route::post('/pengumuman', 'AdminController@pengumuman');
+    Route::get('/sales', 'AdminController@sales')->name('sales');
+    Route::post('/sales', 'AdminController@sales');
+    Route::get('/client', 'AdminController@client')->name('client');
+    Route::post('/client', 'AdminController@client');
     Route::get('/tasks', 'AdminController@tasks')->name('tasks');
     Route::post('/tasks', 'AdminController@tasks');
 });
@@ -46,4 +50,6 @@ Route::name('admin.')->middleware(['auth', 'can:admin'])->prefix('admin')->group
 Route::name('member.')->middleware(['auth', 'can:member'])->prefix('member')->group(function() {
     Route::get('/konsumen', 'KaryawanController@konsumen')->name('konsumen');
     Route::post('/konsumen', 'KaryawanController@konsumen');
+    Route::get('/tasks', 'KaryawanController@tasks')->name('tasks');
+    Route::post('/tasks', 'KaryawanController@tasks');
 });
