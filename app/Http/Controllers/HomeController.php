@@ -27,15 +27,15 @@ class HomeController extends Controller
     {
         $user_id = auth()->id();
         if (auth()->user()->role_id == 1) {
-            $booking = Consument::where('status_konsumen', 'like', '%booking%')->count();
-            $follow = Consument::where('status_konsumen', 'like', '%follow%')->count();
-            $reject = Consument::where('status_konsumen', 'like', '%reject%')->count();
+            $booking = Consument::where('status_konsumen', '5')->count();
+            $follow = Consument::whereNotIn('status_konsumen', [5,6])->count();
+            $reject = Consument::where('status_konsumen', '6')->count();
             $all = Consument::count();
             $kon = Consument::with('user')->get();
         } else {
-            $booking = Consument::where('user_id', $user_id)->where('status_konsumen', 'like', '%booking%')->count();
-            $follow = Consument::where('user_id', $user_id)->where('status_konsumen', 'like', '%follow%')->count();
-            $reject = Consument::where('user_id', $user_id)->where('status_konsumen', 'like', '%reject%')->count();
+            $booking = Consument::where('user_id', $user_id)->where('status_konsumen', '5')->count();
+            $follow = Consument::where('user_id', $user_id)->whereNotIn('status_konsumen', [5,6])->count();
+            $reject = Consument::where('user_id', $user_id)->where('status_konsumen', '6')->count();
             $all = Consument::where('user_id', $user_id)->count();
             $kon = "";
         }

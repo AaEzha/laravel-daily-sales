@@ -167,6 +167,17 @@ class AdminController extends Controller
             $s->data['updated_at'] = now();
             return $s;
         });
+
+        $crud->setRelation('name_sales','sales','name');
+        $crud->setRelation('name_spv','spvs','name');
+        $crud->setRelation('minggu_ke','weeks','name');
+        $crud->setRelation('bulan','months','name');
+        $crud->setRelation('status_database','status_databases','name');
+        $crud->setRelation('program_sumber_informasi','information_sources','name');
+        $crud->setRelation('asal_database','database_sources','name');
+        $crud->setRelation('project','projects','name');
+        $crud->setRelation('status_konsumen','consument_statuses','name');
+        $crud->setRelation('keterangan','notes','name');
         $output = $crud->render();
 
         return $this->_show_output($output, $title);
@@ -197,6 +208,7 @@ class AdminController extends Controller
             $s->data['updated_at'] = now();
             return $s;
         });
+        $crud->setRelation('status_konsumen','consument_statuses','name');
         $output = $crud->render();
 
         return $this->_show_output($output, $title);
